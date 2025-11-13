@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/badge/License-Proprietary-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.2.1-green.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.2.2-green.svg)](CHANGELOG.md)
 [![Min SDK](https://img.shields.io/badge/minSdk-24-orange.svg)](app/build.gradle.kts)
 
 # FastPix Media3 SDK
@@ -42,7 +42,7 @@ repositories {
 ### Step 2: Add the SDK Dependency to `build.gradle`
 ```groovy
 dependencies {
-    implementation 'io.fastpix.data:media3:1.2.1'
+    implementation 'io.fastpix.data:media3:1.2.2'
 }
 ```
 

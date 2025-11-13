@@ -4,6 +4,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.2]
+### Fix
+- **Sdk Version Upgrade**:
+- Sdk Version Update
+
 ## [1.2.1]
 ### Fix
 - **Major Bug Fixes**:
