@@ -1,0 +1,65 @@
+# Gradle files
+.gradle/
+build/
+*/build/
+
+# Local configuration
+local.properties
+.gradle/
+.gradle-cache/
+
+# IDE files
+.idea/
+*.iml
+
+# Android Studio
+captures/
+.navigation/
+caches/
+*.ipr
+*.iws
+
+# Log files
+*.log
+
+# Keystore files (never share)
+*.jks
+*.keystore
+
+# Generated files
+gen/
+out/
+bin/
+obj/
+
+# Android specific
+*.apk
+*.ap_
+*.dex
+*.class
+
+# NDK
+*.so
+*.o
+*.a
+
+# Misc
+.DS_Store
+Thumbs.db
+
+# Jetifier
+.jetifier-cache/
+
+# Kotlin/Java
+*.kotlin_module
+
+# Android test outputs
+androidTest-results/
+test-results/
+
+# User-specific gradle properties
+gradle.properties
+
+# Firebase/Google Services config (if you don’t want in repo)
+google-services.json
+GoogleService-Info.plist
