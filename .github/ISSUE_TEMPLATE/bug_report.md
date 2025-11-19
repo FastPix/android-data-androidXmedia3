@@ -9,19 +9,55 @@ assignees: ''
 ## Bug Description
 A clear and concise description of what the bug is.
 
-## Steps to Reproduce
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## Reproduction Steps
+1. **Setup Environment**
+```groovy
+dependencies {
+    implementation 'io.fastpix.data:media3:1.2.2'
+}
+```
 
-## Expected Behavior
+2. **Code To Reproduce**
+```kotlin
+val videoDataDetails = VideoDataDetails(
+            videoId = UUID.randomUUID().toString(),
+            videoTitle = "My Video"
+        ).apply {
+            videoSeries = "Demo Series"
+            videoProducer = "Demo Producer"
+            videoContentType = "VOD"
+            // ..etc
+        }
+        // Optional
+        val playerDataDetails = PlayerDataDetails(
+            playerName = "media3",
+            playerVersion = "latest-version"
+        )
+        // Optional
+        val customDataDetails = CustomDataDetails().apply {
+            customField1 = "Custom Value 1"
+            customField2 = "Custom Value 2"
+            // ..etc
+        }
+
+        fastPixDataSDK = FastPixBaseMedia3Player(
+            context = this,
+            playerView = binding.playerView,
+            exoPlayer = exoPlayer,
+            workSpaceId = "workspace-key",
+            playerDataDetails = playerDataDetails,
+            videoDataDetails = videoDataDetails,
+            customDataDetails = customDataDetails
+        )
+```
+
+3. **Expected Behavior**
 A clear and concise description of what you expected to happen.
 
-## Actual Behavior
+4. **Actual Behavior**
 A clear and concise description of what actually happened.
 
-## Environment
+5. **Environment**
 - **SDK Version**: [e.g., 1.2.2]
 - **Android Version**: [e.g., Android 12]
 - **Min SDK Version**: [e.g., 24]
