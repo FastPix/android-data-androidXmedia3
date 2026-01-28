@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 - **Sdk Upgrade**:
 - Sdk Version Update
 - Bug Fixes
-- Updates Core SDK version to 1.2.6
+- Upgraded Core SDK version to 1.2.6
 
 ## [1.2.2]
 ### Fix

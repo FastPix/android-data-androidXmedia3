@@ -121,7 +121,7 @@ class VideoPlayerActivity : AppCompatActivity() {
             this, // context
             playerView = binding.playerView, // media3 playerView from XML
             exoPlayer = exoPlayer, // media3 player
-            workSpaceId = "1109888358169935873",
+            workSpaceId = "your-workspace-key",
             enableLogging = false,
             playerDataDetails = playerDataDetails,
             videoDataDetails = videoDataDetails,

@@ -86,7 +86,7 @@ class ReelActivity : AppCompatActivity() {
             this, // context
             playerView = playerView, // media3 playerView from XML
             exoPlayer = player!!, // media3 player
-            workSpaceId = "1115905885550051330",
+            workSpaceId = "your-workspace-key",
             enableLogging = true,
             playerDataDetails = playerDataDetails,
             videoDataDetails = videoDataDetails,
