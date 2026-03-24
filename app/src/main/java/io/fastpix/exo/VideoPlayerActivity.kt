@@ -96,7 +96,7 @@ class VideoPlayerActivity : AppCompatActivity() {
 
     private fun monitorPlayerThroughFastPix() {
 
-        val videoDataDetails = VideoDataDetails("video-id", "video-title").apply {
+        val videoDataDetails = VideoDataDetails(videoModel?.id, videoModel?.id).apply {
             videoSeries = "video-series"
             videoProducer = "video-producer"
             videoContentType = "video-content-type"
@@ -104,6 +104,7 @@ class VideoPlayerActivity : AppCompatActivity() {
             videoLanguage = "video-language"
             videoDuration = "video-duration"
             videoDrmType = "widevine"
+            videoSourceUrl = videoModel?.url
             //...etc
         }
         val customDataDetails = CustomDataDetails().apply {
@@ -121,7 +122,7 @@ class VideoPlayerActivity : AppCompatActivity() {
             this, // context
             playerView = binding.playerView, // media3 playerView from XML
             exoPlayer = exoPlayer, // media3 player
-            workSpaceId = "your-workspace-key",
+            workSpaceId = "1109888358169935873",
             enableLogging = false,
             playerDataDetails = playerDataDetails,
             videoDataDetails = videoDataDetails,

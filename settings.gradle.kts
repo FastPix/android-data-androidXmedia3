@@ -17,21 +17,12 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven {
-            url = uri("https://maven.pkg.github.com/FastPix/android-core-data-sdk")
-            credentials {
-                val props = java.util.Properties()
-                val localPropsFile = file("${rootDir}/local.properties")
-
-                if (localPropsFile.exists()) {
-                    props.load(localPropsFile.inputStream())
-                }
-                username = props.getProperty("gpr.user")
-                password = props.getProperty("gpr.key")
-            }
+            url = uri("https://muxinc.jfrog.io/artifactory/default-maven-release-local")
         }
     }
 }
 
 rootProject.name = "Media3Data"
-include(":app", ":media3")
+include(":app", ":media3", ":android-data-core")
+project(":android-data-core").projectDir = file("android-data-core/android-data-core-sdk")
 

@@ -57,4 +57,7 @@ dependencies {
 
     //Gson
     implementation(libs.gson)
+
+    // Mux
+    implementation("com.mux.stats.sdk.muxstats:data-media3-at_1_1:1.11.1")
 }
