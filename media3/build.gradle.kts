@@ -36,9 +36,6 @@ android {
 }
 
 dependencies {
-    // FastPix Core
-    api(project(":android-data-core"))
-
     // Core Android dependencies
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -54,6 +51,9 @@ dependencies {
     api(libs.exoplayer.ui)
     api(libs.exoplayer.common)
     api(libs.androidx.media3.exoplayer.hls)
+
+    // FastPix Core
+    api(libs.core)
 }
 
 val localProperties = Properties().apply {

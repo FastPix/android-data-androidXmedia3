@@ -21,12 +21,6 @@ import androidx.media3.ui.PlayerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.mux.stats.sdk.core.model.CustomerData
-import com.mux.stats.sdk.core.model.CustomerPlayerData
-import com.mux.stats.sdk.core.model.CustomerVideoData
-import com.mux.stats.sdk.core.model.CustomerViewData
-import com.mux.stats.sdk.muxstats.MuxStatsSdkMedia3
-import com.mux.stats.sdk.muxstats.monitorWithMuxData
 import io.fastpix.data.domain.model.CustomDataDetails
 import io.fastpix.data.domain.model.PlayerDataDetails
 import io.fastpix.data.domain.model.VideoDataDetails
@@ -34,6 +28,7 @@ import io.fastpix.data.exo.FastPixBaseMedia3Player
 import io.fastpix.media3.databinding.ActivityReelBinding
 import io.fastpix.media3.databinding.ItemVideoBinding
 import io.fastpix.reelapp.VideoItem
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 @OptIn(UnstableApi::class)
@@ -47,26 +42,7 @@ class ReelActivity : AppCompatActivity() {
     private var isUserSeeking = false
     private var currentViewHolder: VideoAdapter.ViewHolder? = null
     private var fastPixDataSDK: FastPixBaseMedia3Player? = null
-    private var muxDataSdk: MuxStatsSdkMedia3<ExoPlayer>? = null
     private var currentPosition = 0
-
-    private fun monitorMuxPlayer(playerview: PlayerView, position: Int) {
-        val customerData = CustomerData(
-            CustomerPlayerData().apply { },
-            CustomerVideoData().apply {
-                videoTitle = videoItems[position].id
-            },
-            CustomerViewData().apply {
-            }
-        )
-
-        muxDataSdk = player?.monitorWithMuxData(
-            context = this,
-            envKey = "rtcbtoaou3a4gkp3vdcns42h5",
-            customerData = customerData,
-            playerView = playerview
-        )
-    }
 
     // Video URLs list
     private val videoUrls = listOf(
@@ -85,7 +61,7 @@ class ReelActivity : AppCompatActivity() {
     private fun monitorPlayerThroughFastPix(playerView: PlayerView, position: Int) {
 
         val videoDataDetails =
-            VideoDataDetails(videoItems[position].id, videoItems[position].id).apply {
+            VideoDataDetails(videoItems[position].id, videoItems[position].url).apply {
                 videoSeries = "video-series"
                 videoProducer = "video-producer"
                 videoContentType = "video-content-type"
@@ -93,7 +69,6 @@ class ReelActivity : AppCompatActivity() {
                 videoLanguage = "video-language"
                 videoDuration = "video-duration"
                 videoDrmType = "widevine"
-                videoSourceUrl = videoItems[position].url
                 //...etc
             }
         val customDataDetails = CustomDataDetails().apply {
@@ -111,7 +86,7 @@ class ReelActivity : AppCompatActivity() {
             this, // context
             playerView = playerView, // media3 playerView from XML
             exoPlayer = player!!, // media3 player
-            workSpaceId = "1109888358169935873",
+            workSpaceId = "your-workspace-key",
             enableLogging = true,
             playerDataDetails = playerDataDetails,
             videoDataDetails = videoDataDetails,
@@ -279,7 +254,6 @@ class ReelActivity : AppCompatActivity() {
 
             // Release previous SDK instance before switching to new video
             fastPixDataSDK?.release()
-            muxDataSdk?.release()
 
             // Attach player to new view
             player?.let { player ->
@@ -294,7 +268,6 @@ class ReelActivity : AppCompatActivity() {
                 viewHolder.binding.playerView.player = player
 
                 // Initialize FastPix SDK before video starts (before prepare)
-                monitorMuxPlayer(viewHolder.binding.playerView, position)
                 monitorPlayerThroughFastPix(viewHolder.binding.playerView, position)
 
                 // Prepare and auto-play
@@ -556,7 +529,6 @@ class ReelActivity : AppCompatActivity() {
             handler.removeCallbacks(it)
         }
         fastPixDataSDK?.release()
-        muxDataSdk?.release()
         player?.release()
         player = null
     }
