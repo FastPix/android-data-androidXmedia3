@@ -4,6 +4,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.4]
+### Changes
+- Version Upgrade to 1.2.4
+- Updates Core SDK version to 1.2.7
+- Refactors SDK initialization to use `FastPixAnalytics` singleton
+- Adds unique player instance ID and enhanced logging for session tracking
+- Improves lifecycle management with better null safety and coroutine cancellation
+- Updates event dispatching logic to check initialization state and include session details in logs
+
 ## [1.2.3]
 ### Fix
 - **Sdk Upgrade**:
