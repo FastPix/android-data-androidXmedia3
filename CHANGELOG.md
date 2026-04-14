@@ -4,6 +4,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.5]
+### Upgrade
+- Version Upgrade to 1.2.9
+- Updates Core SDK version to 1.2.9
+- Adds unique player instance ID and enhanced logging for session tracking and release events
+- Refines pulse event scheduling logic across player states (play, seeked, buffering)
+- Optimizes event dispatching by adjusting pulse event triggers for improved session monitoring
+
 ## [1.2.4]
 ### Changes
 - Version Upgrade to 1.2.4

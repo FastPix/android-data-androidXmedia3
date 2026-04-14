@@ -61,6 +61,8 @@ class FastPixBaseMedia3Player(
 ) : PlayerListener {
 
     private val TAG = "FastPixBaseMedia3Player"
+    private val playerInstanceId: String = UUID.randomUUID().toString()
+    private val videoIdForLogs: String? get() = videoDataDetails?.videoId
     private var fastPixDataSDK: FastPixDataSDK? = null
 
     // State machine for valid event transitions
@@ -100,6 +102,10 @@ class FastPixBaseMedia3Player(
     }
 
     private fun initializeFastPixSDK() {
+        Logger.log(
+            TAG,
+            "SESSION_CREATED: videoId=${videoIdForLogs ?: "none"} playerInstanceId=$playerInstanceId"
+        )
         setUpListener()
         val sdkConfiguration = SDKConfiguration(
             workspaceId = workSpaceId,
@@ -126,7 +132,7 @@ class FastPixBaseMedia3Player(
         if (enableLogging) {
             Log.d(TAG, "Dispatching ViewBegin event")
         }
-        cancelPulseEvent()
+        schedulePulseEvents()
         fastPixDataSDK?.dispatchEvent(PlayerEventType.viewBegin)
     }
 
@@ -136,7 +142,6 @@ class FastPixBaseMedia3Player(
         if (enableLogging) {
             Log.d(TAG, "Dispatching Play Ready event")
         }
-        cancelPulseEvent()
         fastPixDataSDK?.dispatchEvent(PlayerEventType.playerReady)
     }
 
@@ -448,7 +453,7 @@ class FastPixBaseMedia3Player(
             if (enableLogging) {
                 Log.d(TAG, "Dispatching Play event")
             }
-            cancelPulseEvent()
+            schedulePulseEvents()
             fastPixDataSDK?.dispatchEvent(PlayerEventType.play)
             // Process any queued variant change events after play event
             processQueuedVariantChangeEvents()
@@ -492,7 +497,6 @@ class FastPixBaseMedia3Player(
             if (enableLogging) {
                 Log.d(TAG, "Dispatching Seeking event")
             }
-            cancelPulseEvent()
             // Temporarily set currentPosition to seeking start position for the seeking event
             fastPixDataSDK?.dispatchEvent(PlayerEventType.seeking, currentPosition)
         }
@@ -504,7 +508,11 @@ class FastPixBaseMedia3Player(
             if (enableLogging) {
                 Log.d(TAG, "Dispatching Seeked event")
             }
-            cancelPulseEvent()
+            if (exoPlayer.isPlaying == false) {
+                cancelPulseEvent()
+            } else {
+                schedulePulseEvents()
+            }
             fastPixDataSDK?.dispatchEvent(PlayerEventType.seeked)
         }
     }
@@ -516,6 +524,7 @@ class FastPixBaseMedia3Player(
             if (enableLogging) {
                 Log.d(TAG, "Dispatching Buffering event")
             }
+            schedulePulseEvents()
             fastPixDataSDK?.dispatchEvent(PlayerEventType.buffering)
         }
     }
@@ -527,7 +536,6 @@ class FastPixBaseMedia3Player(
             if (enableLogging) {
                 Log.d(TAG, "Dispatching Buffered event")
             }
-            cancelPulseEvent()
             fastPixDataSDK?.dispatchEvent(PlayerEventType.buffered)
         }
     }
@@ -554,7 +562,6 @@ class FastPixBaseMedia3Player(
             if (enableLogging) {
                 Log.d(TAG, "Dispatching VariantChange event")
             }
-            schedulePulseEvents()
             fastPixDataSDK?.dispatchEvent(PlayerEventType.variantChanged)
         } else {
             pendingVariantChangeEvents.add(true)
@@ -675,6 +682,10 @@ class FastPixBaseMedia3Player(
     }
 
     fun release() {
+        Logger.log(
+            TAG,
+            "onPlayerRelease(): begin playerInstanceId=$playerInstanceId videoId=${videoIdForLogs ?: "none"}"
+        )
         isReleased = true
         cancelPulseEvent()
         if (fastPixDataSDK != null) {
