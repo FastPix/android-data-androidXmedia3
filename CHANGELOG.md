@@ -4,6 +4,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.6]
+### Upgrade
+- Updates Core SDK version to 1.3.0
+
 ## [1.2.5]
 ### Upgrade
 - Version Upgrade to 1.2.9
