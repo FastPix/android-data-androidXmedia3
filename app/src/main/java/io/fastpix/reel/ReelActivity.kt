@@ -28,7 +28,7 @@ import io.fastpix.data.exo.FastPixBaseMedia3Player
 import io.fastpix.media3.databinding.ActivityReelBinding
 import io.fastpix.media3.databinding.ItemVideoBinding
 import io.fastpix.reelapp.VideoItem
-import java.util.UUID
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 @OptIn(UnstableApi::class)
@@ -195,10 +195,10 @@ class ReelActivity : AppCompatActivity() {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     // Scrolling stopped - find the current visible item
-                    val layoutManager = recyclerView.layoutManager as? LinearLayoutManager
+                    val lm = recyclerView.layoutManager as? LinearLayoutManager
                     val firstVisiblePosition =
-                        layoutManager?.findFirstCompletelyVisibleItemPosition()
-                            ?: layoutManager?.findFirstVisibleItemPosition() ?: -1
+                        lm?.findFirstCompletelyVisibleItemPosition()
+                            ?: lm?.findFirstVisibleItemPosition() ?: -1
 
                     if (firstVisiblePosition >= 0 && firstVisiblePosition != currentPosition) {
                         // Switch to new video
@@ -467,11 +467,12 @@ class ReelActivity : AppCompatActivity() {
         val durationSeconds = TimeUnit.MILLISECONDS.toSeconds(duration) % 60
 
         binding.timeDisplay.text = String.format(
+            Locale.getDefault(),
             "%02d:%02d / %02d:%02d",
             currentMinutes,
             currentSeconds,
             durationMinutes,
-            durationSeconds
+            durationSeconds,
         )
     }
 

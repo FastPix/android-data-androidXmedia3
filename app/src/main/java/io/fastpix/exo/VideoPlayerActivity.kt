@@ -502,8 +502,8 @@ class VideoPlayerActivity : AppCompatActivity() {
      */
     private fun isNetworkRelatedError(error: PlaybackException): Boolean {
         // Check for common network-related error types
-        val errorMessage = error.message?.lowercase() ?: ""
-        val causeMessage = error.cause?.message?.lowercase() ?: ""
+        val errorMessage = error.message?.lowercase().orEmpty()
+        val causeMessage = error.cause?.message?.lowercase().orEmpty()
 
         val networkKeywords = listOf(
             "network", "connection", "timeout", "unreachable",

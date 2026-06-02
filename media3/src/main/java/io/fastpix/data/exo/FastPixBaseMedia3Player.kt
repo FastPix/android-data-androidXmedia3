@@ -10,6 +10,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.Timeline
+import androidx.media3.common.TrackGroup
 import androidx.media3.common.Tracks
 import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
@@ -18,7 +19,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.analytics.AnalyticsListener
 import androidx.media3.exoplayer.source.LoadEventInfo
 import androidx.media3.exoplayer.source.MediaLoadData
-import androidx.media3.exoplayer.source.TrackGroupArray
 import io.fastpix.data.FastPixAnalytics
 import io.fastpix.data.FastPixDataSDK
 import io.fastpix.data.domain.SDKConfiguration
@@ -424,10 +424,9 @@ class FastPixBaseMedia3Player(
             override fun onTracksChanged(tracks: Tracks) {
                 super.onTracksChanged(tracks)
                 try {
-                    val trackGroups =
-                        TrackGroupArray(*tracks.groups.map { it.mediaTrackGroup }.toTypedArray())
-                    if (trackGroups.length > 0) {
-                        mimeType = trackGroups.get(0).getFormat(0).containerMimeType
+                    val trackGroups = tracks.groups.map { it.mediaTrackGroup }
+                    if (trackGroups.isNotEmpty()) {
+                        mimeType = trackGroups[0].getFormat(0).containerMimeType
                     }
                     bandwidthDispatcher.onTracksChanged(trackGroups)
                 } catch (ex: Exception) {
@@ -749,7 +748,7 @@ class FastPixBaseMedia3Player(
      * BandwidthMetric class for tracking individual chunk downloads
      */
     internal open inner class BandwidthMetric {
-        var availableTracks: TrackGroupArray? = null
+        var availableTracks: List<TrackGroup>? = null
         var loadedSegments: HashMap<Long, ChunkDownloadData> = HashMap()
 
         open fun onLoadError(
@@ -876,8 +875,7 @@ class FastPixBaseMedia3Player(
 
             if (trackFormat != null && availableTracks != null) {
                 availableTracks?.let { tracksList ->
-                    for (i in 0 until tracksList.length) {
-                        val tracks = tracksList[i]
+                    for (tracks in tracksList) {
                         for (trackGroupIndex in 0 until tracks.length) {
                             val currentFormat = tracks.getFormat(trackGroupIndex)
                             if (trackFormat.width == currentFormat.width &&
@@ -1042,31 +1040,28 @@ class FastPixBaseMedia3Player(
             }
         }
 
-        fun onTracksChanged(trackGroups: TrackGroupArray) {
+        fun onTracksChanged(trackGroups: List<TrackGroup>) {
             currentBandwidthMetric().availableTracks = trackGroups
-            if (trackGroups.length > 0) {
-                for (groupIndex in 0 until trackGroups.length) {
-                    val trackGroup = trackGroups[groupIndex]
-                    if (0 < trackGroup.length) {
-                        var trackFormat = trackGroup.getFormat(0)
-                        if (trackFormat.containerMimeType != null && trackFormat.containerMimeType!!.contains(
-                                "video"
+            for (trackGroup in trackGroups) {
+                if (0 < trackGroup.length) {
+                    var trackFormat = trackGroup.getFormat(0)
+                    if (trackFormat.containerMimeType != null && trackFormat.containerMimeType!!.contains(
+                            "video"
+                        )
+                    ) {
+                        val renditions: MutableList<ChunkRendition> = ArrayList()
+                        for (i in 0 until trackGroup.length) {
+                            trackFormat = trackGroup.getFormat(i)
+                            val rendition = ChunkRendition(
+                                bitrate = trackFormat.bitrate.toLong(),
+                                width = trackFormat.width,
+                                height = trackFormat.height,
+                                codec = trackFormat.codecs,
+                                fps = trackFormat.frameRate.toInt()
                             )
-                        ) {
-                            val renditions: MutableList<ChunkRendition> = ArrayList()
-                            for (i in 0 until trackGroup.length) {
-                                trackFormat = trackGroup.getFormat(i)
-                                val rendition = ChunkRendition(
-                                    bitrate = trackFormat.bitrate.toLong(),
-                                    width = trackFormat.width,
-                                    height = trackFormat.height,
-                                    codec = trackFormat.codecs,
-                                    fps = trackFormat.frameRate.toInt()
-                                )
-                                renditions.add(rendition)
-                            }
-                            renditionList = renditions
+                            renditions.add(rendition)
                         }
+                        renditionList = renditions
                     }
                 }
             }
