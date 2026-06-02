@@ -1040,14 +1040,16 @@ class FastPixBaseMedia3Player(
             }
         }
 
+        val VIDEO = "video"
+
         fun onTracksChanged(trackGroups: List<TrackGroup>) {
             currentBandwidthMetric().availableTracks = trackGroups
             for (trackGroup in trackGroups) {
                 if (0 < trackGroup.length) {
                     var trackFormat = trackGroup.getFormat(0)
-                    if (trackFormat.containerMimeType != null && trackFormat.containerMimeType!!.contains(
-                            "video"
-                        )
+                    if (trackFormat.containerMimeType != null && trackFormat.containerMimeType?.contains(
+                            VIDEO
+                        ) == true
                     ) {
                         val renditions: MutableList<ChunkRendition> = ArrayList()
                         for (i in 0 until trackGroup.length) {
