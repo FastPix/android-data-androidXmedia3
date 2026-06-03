@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.fastpix.media3.databinding.VideoRowBinding
 
-class VideoAdapter() :
+class VideoAdapter :
     RecyclerView.Adapter<VideoAdapter.VideoViewHolder>() {
     private var videos: List<DummyData>? = null
     var onVideoClick: ((DummyData?) -> Unit)? = null
