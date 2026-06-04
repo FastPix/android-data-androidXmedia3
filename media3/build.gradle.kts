@@ -68,7 +68,7 @@ publishing {
         create<MavenPublication>("bar") {
             groupId = "io.fastpix.data"
             artifactId = "media3"
-            version = "1.2.6"
+            version = "1.2.7"
             artifact("${buildDir}/outputs/aar/media3-release.aar")
 
             pom.withXml {
