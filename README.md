@@ -125,14 +125,14 @@ This project is proprietary software. The FastPix SDK components are proprietary
 ## 📧 Support
 
 For questions, issues, or feature requests:
-
-- **Documentation**: [FastPix Documentation](https://docs.fastpix.com)
+- **Email**: support@fastpix.com 
+- **Documentation**: [FastPix Documentation](https://fastpix.com/docs)
 - **SDK Issues**: [GitHub Issues](https://github.com/FastPix/android-core-data-sdk/issues)
 
 ## 🔗 Related Documentation
 
 - [Android Data Core SDK README](android-data-core/README.md)
-- [FastPix Documentation](https://docs.fastpix.com)
+- [FastPix Documentation](https://fastpix.com/docs)
 - [AndroidX Media3 Documentation](https://developer.android.com/guide/topics/media/media3)
 - [ExoPlayer Developer Guide](https://developer.android.com/guide/topics/media/exoplayer)
 
