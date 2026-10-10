@@ -29,10 +29,11 @@ New to the SDK? Follow these in order and you will have ExoPlayer analytics flow
 8. [Add the SDK dependency](#add-the-sdk-dependency)
 9. [Add the required permissions](#add-the-required-permissions)
 10. [Attach the SDK to your ExoPlayer](#attach-the-sdk-to-your-exoplayer)
-11. [Verify events in your dashboard](#verify-events-in-your-dashboard)
-12. [Which FastPix data SDK do I need?](#which-fastpix-data-sdk-do-i-need)
-13. [FAQ](#faq)
-14. [Troubleshooting](#troubleshooting)
+11. [Run the sample app](#run-the-sample-app)
+12. [Verify events in your dashboard](#verify-events-in-your-dashboard)
+13. [Which FastPix data SDK do I need?](#which-fastpix-data-sdk-do-i-need)
+14. [FAQ](#faq)
+15. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -91,11 +92,28 @@ You will need:
 
 ## Add the GitHub Packages repositories
 
-The SDK (`io.fastpix.data:media3`) and its required core dependency (`io.fastpix.data:core`) live in **two** GitHub Packages repositories. Add **both**, or the core dependency will fail to resolve. Put your GitHub username and PAT in `gradle.properties` (or `~/.gradle/gradle.properties`, so credentials stay out of source control) and reference them here.
+The SDK (`io.fastpix.data:media3`) and its required core dependency (`io.fastpix.data:core`) live in **two** GitHub Packages repositories. Add **both**, or the core dependency will fail to resolve.
 
-In `settings.gradle`:
+GitHub Packages requires authentication, so provide your GitHub username and a PAT (`read:packages`). Put them in `local.properties` (which is git-ignored, so your token is never committed):
 
-```groovy
+```properties
+# local.properties
+gpr.user=YOUR_GITHUB_USERNAME
+gpr.key=YOUR_PERSONAL_ACCESS_TOKEN
+```
+
+Then read those values in `settings.gradle.kts` and apply them to both repositories:
+
+```kotlin
+import java.util.Properties
+
+val credsProps = Properties().apply {
+    val f = file("${rootDir}/local.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+val githubUser = credsProps.getProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+val githubToken = credsProps.getProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+
 dependencyResolutionManagement {
     repositories {
         google()
@@ -103,20 +121,22 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://maven.pkg.github.com/FastPix/android-data-androidXmedia3")
             credentials {
-                username = "<your-github-username>"
-                password = "<your-personal-access-token>"
+                username = githubUser
+                password = githubToken
             }
         }
         maven {
             url = uri("https://maven.pkg.github.com/FastPix/android-core-data-sdk")
             credentials {
-                username = "<your-github-username>"
-                password = "<your-personal-access-token>"
+                username = githubUser
+                password = githubToken
             }
         }
     }
 }
 ```
+
+> **Never commit your PAT.** Keep `gpr.user` / `gpr.key` in `local.properties` (git-ignored) or in the `GITHUB_ACTOR` / `GITHUB_TOKEN` environment variables for CI - never inline in a tracked file.
 
 ## Add the SDK dependency
 
@@ -210,6 +230,38 @@ class VideoPlayerActivity : AppCompatActivity() {
 ```
 
 Replace `workspace-key` with your real Workspace Key and `YOUR_VIDEO_URL` with your stream. For the full list of metadata fields, see [Use custom dimensions](https://fastpix.com/docs/video-data/use-custom-dimensions).
+
+## Run the sample app
+
+This repo includes a runnable sample in the [`app/`](app) module that plays FastPix sample streams with the SDK attached. To build and run it:
+
+1. Clone the repository and open it in Android Studio:
+
+   ```bash
+   git clone https://github.com/FastPix/android-data-androidXmedia3.git
+   cd android-data-androidXmedia3
+   ```
+
+2. Add your GitHub credentials to `local.properties` so Gradle can download the SDK (see [Add the GitHub Packages repositories](#add-the-github-packages-repositories)):
+
+   ```properties
+   gpr.user=YOUR_GITHUB_USERNAME
+   gpr.key=YOUR_PERSONAL_ACCESS_TOKEN
+   ```
+
+3. To send analytics to your own workspace, open [`app/src/main/java/io/fastpix/exo/VideoPlayerActivity.kt`](app/src/main/java/io/fastpix/exo/VideoPlayerActivity.kt) and replace the `workSpaceId = "your-workspace-key"` placeholder with the Workspace Key from your [FastPix dashboard](https://dashboard.fastpix.com). The bundled reel feed ([`ReelActivity`](app/src/main/java/io/fastpix/reel/ReelActivity.kt)) plays ready-made FastPix streams, so you can run it as-is without changing the video URLs.
+
+4. Select a device or emulator running Android 7.0 (API 24) or higher.
+
+5. Run the app from Android Studio, or from the command line:
+
+   ```bash
+   ./gradlew :app:installDebug
+   ```
+
+The app opens the reel feed and starts playing. As the video plays, the SDK sends QoE beacons (startup, buffering, bitrate changes, engagement) to FastPix; confirm them in [Verify events in your dashboard](#verify-events-in-your-dashboard).
+
+> **If the build fails with "`android.useAndroidX` property is not enabled",** add `android.useAndroidX=true` to the project's `gradle.properties`, then rebuild.
 
 ## Verify events in your dashboard
 
