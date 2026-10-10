@@ -1,15 +1,15 @@
-# FastPix ExoPlayer SDK for AndroidX Media3 - monitor playback performance and QoE
+# FastPix Video Data SDK for AndroidX Media3 - monitor playback performance and QoE
 
 [![License](https://img.shields.io/badge/License-Proprietary-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.2.7-green.svg)](CHANGELOG.md)
 [![Min SDK](https://img.shields.io/badge/minSdk-24-orange.svg)](app/build.gradle.kts)
-[![ExoPlayer](https://img.shields.io/badge/ExoPlayer-AndroidX%20Media3-3DDC84.svg)](https://developer.android.com/media/media3)
+[![AndroidX Media3](https://img.shields.io/badge/AndroidX-Media3-3DDC84.svg)](https://developer.android.com/media/media3)
 
-**Use the FastPix ExoPlayer SDK to monitor streaming quality, playback performance, and user interactions in your Android app.** It is the official FastPix Video Data SDK for [AndroidX Media3 ExoPlayer](https://developer.android.com/media/media3) - wrap your `ExoPlayer` with `FastPixBaseMedia3Player` and it automatically tracks startup time, rebuffering, bitrate changes, playback errors, and viewer engagement, then streams them as real-time quality-of-experience (QoE) analytics to the [FastPix dashboard](https://dashboard.fastpix.com). It builds on [FastPix's Android Data Core SDK](https://github.com/FastPix/android-core-data-sdk).
+**Use the FastPix Video Data SDK for Media3 to monitor streaming quality, playback performance, and user interactions in your Android app.** It is the official FastPix Video Data SDK for [AndroidX Media3](https://developer.android.com/media/media3) - wrap your Media3 player with `FastPixBaseMedia3Player` and it automatically tracks startup time, rebuffering, bitrate changes, playback errors, and viewer engagement, then streams them as real-time quality-of-experience (QoE) analytics to the [FastPix dashboard](https://dashboard.fastpix.com). It builds on [FastPix's Android Data Core SDK](https://github.com/FastPix/android-core-data-sdk).
 
-It is not a video player - it is a drop-in analytics layer for the ExoPlayer you already use. Under the hood it hooks into Media3's `AnalyticsListener`, so there is no manual event wiring.
+It is not a video player - it is a drop-in analytics layer for the Media3 player you already use. Under the hood it hooks into Media3's `AnalyticsListener`, so there is no manual event wiring.
 
-**Works with:** AndroidX Media3 ExoPlayer on Android 7.0 (API 24) and above, HLS and MP4 sources, Kotlin and Java. Powered by [FastPix](https://fastpix.com), the video API platform.
+**Works with:** AndroidX Media3 on Android 7.0 (API 24) and above, HLS and MP4 sources, Kotlin and Java. Powered by [FastPix](https://fastpix.com), the video API platform.
 
 [FastPix docs](https://fastpix.com/docs/video-data/monitors/androidx-media3) · [Video Data overview](https://fastpix.com/docs/video-data/overview) · [Create a free account](https://dashboard.fastpix.com/signup?utm_source=github&utm_medium=referral&utm_campaign=github_signup)
 
@@ -17,9 +17,9 @@ It is not a video player - it is a drop-in analytics layer for the ExoPlayer you
 
 ## Start here
 
-New to the SDK? Follow these in order and you will have ExoPlayer analytics flowing to your dashboard:
+New to the SDK? Follow these in order and you will have Media3 analytics flowing to your dashboard:
 
-1. [Why FastPix for ExoPlayer?](#why-fastpix-for-exoplayer)
+1. [Why FastPix for Media3?](#why-fastpix-for-media3)
 2. [What you can track](#what-you-can-track)
 3. [How it works](#how-it-works)
 4. [Who it's for](#who-its-for)
@@ -28,7 +28,7 @@ New to the SDK? Follow these in order and you will have ExoPlayer analytics flow
 7. [Add the GitHub Packages repositories](#add-the-github-packages-repositories)
 8. [Add the SDK dependency](#add-the-sdk-dependency)
 9. [Add the required permissions](#add-the-required-permissions)
-10. [Attach the SDK to your ExoPlayer](#attach-the-sdk-to-your-exoplayer)
+10. [Attach the SDK to your Media3 player](#attach-the-sdk-to-your-media3-player)
 11. [Run the sample app](#run-the-sample-app)
 12. [Verify events in your dashboard](#verify-events-in-your-dashboard)
 13. [Which FastPix data SDK do I need?](#which-fastpix-data-sdk-do-i-need)
@@ -37,14 +37,14 @@ New to the SDK? Follow these in order and you will have ExoPlayer analytics flow
 
 ---
 
-## Why FastPix for ExoPlayer?
+## Why FastPix for Media3?
 
-Media3's `AnalyticsListener` and `PlaybackStatsListener` give you raw playback events, but turning them into startup-time, rebuffering, and error dashboards is work you have to build and maintain. FastPix does that for you: wrap your `ExoPlayer`, pass your workspace key, and every session shows up on the dashboard with QoE metrics you can slice by device, app version, video, and custom dimensions.
+Media3's `AnalyticsListener` and `PlaybackStatsListener` give you raw playback events, but turning them into startup-time, rebuffering, and error dashboards is work you have to build and maintain. FastPix does that for you: wrap your Media3 player, pass your workspace key, and every session shows up on the dashboard with QoE metrics you can slice by device, app version, video, and custom dimensions.
 
-- **No new player required.** Keep the `ExoPlayer` you already ship. The SDK observes it; it does not replace it.
+- **No new player required.** Keep the Media3 player you already ship. The SDK observes it; it does not replace it.
 - **Real-time QoE analytics.** Startup time, rebuffering, bitrate/resolution changes, and playback failures, collected as the video plays.
 - **Viewer engagement.** See what people actually watch, and where they drop off.
-- **Built on Media3's own hooks.** It attaches through `AnalyticsListener`, so it stays accurate across ExoPlayer versions.
+- **Built on Media3's own hooks.** It attaches through `AnalyticsListener`, so it stays accurate across Media3 versions.
 - **Custom and beacon domains.** Attach up to ten custom dimensions and send analytics to a custom tracking domain.
 
 ## What you can track
@@ -57,13 +57,13 @@ Media3's `AnalyticsListener` and `PlaybackStatsListener` give you raw playback e
 
 ## How it works
 
-<Image alt="How FastPix monitors ExoPlayer: AndroidX Media3 player to the FastPix SDK to the dashboard" border={false} src="https://static.fastpix.com/media3-exoplayer-data-flow.png" />
+<Image alt="How FastPix monitors Media3: an AndroidX Media3 player to the FastPix SDK to the dashboard" border={false} src="https://static.fastpix.com/media3-exoplayer-data-flow.png" />
 
-Your app plays a video with AndroidX Media3 `ExoPlayer`. You wrap that player with `FastPixBaseMedia3Player`, which attaches to its `AnalyticsListener` and turns playback signals (startup, bitrate, rebuffering, errors, engagement) into beacons sent to FastPix, keyed to your workspace. A few minutes later the session appears in your FastPix dashboard as QoE and engagement analytics.
+Your app plays a video with AndroidX Media3. You wrap that player with `FastPixBaseMedia3Player`, which attaches to its `AnalyticsListener` and turns playback signals (startup, bitrate, rebuffering, errors, engagement) into beacons sent to FastPix, keyed to your workspace. A few minutes later the session appears in your FastPix dashboard as QoE and engagement analytics.
 
 ## Who it's for
 
-Any Android team that streams video with ExoPlayer and needs to see how playback actually performs:
+Any Android team that streams video with Media3 and needs to see how playback actually performs:
 
 - **OTT and streaming apps** - track startup time and rebuffering across phones, tablets, and Android TV.
 - **E-learning and course apps** - see which lessons stall or get abandoned.
@@ -85,7 +85,7 @@ Any Android team that streams video with ExoPlayer and needs to see how playback
 You will need:
 
 - **A FastPix account and workspace key.** [Create a free account](https://dashboard.fastpix.com/signup?utm_source=github&utm_medium=referral&utm_campaign=github_signup), then copy the **Workspace Key** from your FastPix dashboard. See [Set up a workspace](https://fastpix.com/docs/getting-started/set-up-a-workspace). This is the only value the SDK strictly requires.
-- **An ExoPlayer that already plays a video.** The SDK wraps your Media3 `ExoPlayer`, so it must already be playing before you add analytics.
+- **A Media3 player that already plays a video.** The SDK wraps your Media3 player, so it must already be playing before you add analytics.
 - **A GitHub Personal Access Token (PAT)** with the `read:packages` scope. The SDK and its core dependency are published to **GitHub Packages**, which requires authentication even for public packages. [Create a token](https://github.com/settings/tokens).
 
 ---
@@ -159,9 +159,9 @@ The SDK sends analytics over the network, so your app's `AndroidManifest.xml` ne
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 ```
 
-## Attach the SDK to your ExoPlayer
+## Attach the SDK to your Media3 player
 
-Set up your `ExoPlayer` as usual, then create a `FastPixBaseMedia3Player` with your player view, the ExoPlayer instance, and your workspace key. The video, player, and custom metadata objects are optional but make the dashboard easier to slice. Release the SDK alongside the player.
+Set up your Media3 player as usual, then create a `FastPixBaseMedia3Player` with your player view, the player instance, and your workspace key. The video, player, and custom metadata objects are optional but make the dashboard easier to slice. Release the SDK alongside the player.
 
 ```kotlin
 class VideoPlayerActivity : AppCompatActivity() {
@@ -279,8 +279,8 @@ Pick the data SDK that matches the player you ship. All of them report to the sa
 
 | You are using | Use this SDK |
 |---|---|
-| AndroidX Media3 / ExoPlayer | **This repo** ([android-data-androidXmedia3](https://github.com/FastPix/android-data-androidXmedia3)) |
-| Legacy ExoPlayer 2.x (`com.google.android.exoplayer2`) | [android-data-exoplayer-sdk](https://github.com/FastPix/android-data-exoplayer-sdk) |
+| AndroidX Media3 | **This repo** ([android-data-androidXmedia3](https://github.com/FastPix/android-data-androidXmedia3)) |
+| The legacy standalone `com.google.android.exoplayer2` library | [android-data-exoplayer-sdk](https://github.com/FastPix/android-data-exoplayer-sdk) |
 | Android native `MediaPlayer` | [android-media-player-data](https://github.com/FastPix/android-media-player-data) |
 | AVPlayer (iOS) | [iOS-data-avplayer-sdk](https://github.com/FastPix/iOS-data-avplayer-sdk) |
 | React Native (Android + iOS) | [react-native-video-data](https://github.com/FastPix/react-native-video-data) |
@@ -290,17 +290,17 @@ Related building block: [android-core-data-sdk](https://github.com/FastPix/andro
 
 ## FAQ
 
-**How do I monitor ExoPlayer performance in Android?**
-Wrap your Media3 `ExoPlayer` with `FastPixBaseMedia3Player` and pass your workspace key (see [Attach the SDK to your ExoPlayer](#attach-the-sdk-to-your-exoplayer)). From then on, streaming quality, startup time, rebuffering, playback errors, and engagement appear in the FastPix dashboard - no manual `AnalyticsListener` wiring.
+**How do I monitor Media3 playback performance in Android?**
+Wrap your Media3 player with `FastPixBaseMedia3Player` and pass your workspace key (see [Attach the SDK to your Media3 player](#attach-the-sdk-to-your-media3-player)). From then on, streaming quality, startup time, rebuffering, playback errors, and engagement appear in the FastPix dashboard - no manual `AnalyticsListener` wiring.
 
 **How do I track video analytics in an Android app?**
-If your app uses AndroidX Media3 / ExoPlayer, add this SDK, wrap your `ExoPlayer`, and pass your workspace key. It builds on Media3's `AnalyticsListener` and sends the data to the FastPix dashboard. Start at [Add the GitHub Packages repositories](#add-the-github-packages-repositories).
+If your app uses AndroidX Media3, add this SDK, wrap your Media3 player, and pass your workspace key. It builds on Media3's `AnalyticsListener` and sends the data to the FastPix dashboard. Start at [Add the GitHub Packages repositories](#add-the-github-packages-repositories).
 
-**Is this an alternative to Mux Data for ExoPlayer?**
-Yes. Like Mux Data for ExoPlayer, FastPix provides a native tracking wrapper for AndroidX Media3 / ExoPlayer that monitors startup time, rebuffering, bitrate, playback errors, and engagement, and reports them to the FastPix dashboard.
+**Is this an alternative to Mux Data for Media3?**
+Yes. Like Mux Data for Android, FastPix provides a native tracking wrapper for AndroidX Media3 that monitors startup time, rebuffering, bitrate, playback errors, and engagement, and reports them to the FastPix dashboard.
 
-**Does it work with the old ExoPlayer 2.x library?**
-This repo is for AndroidX Media3 (the current ExoPlayer). For the legacy standalone `com.google.android.exoplayer2` library, use [android-data-exoplayer-sdk](https://github.com/FastPix/android-data-exoplayer-sdk). Both report to the same FastPix dashboard.
+**Does it work with the old standalone player library?**
+This repo is for AndroidX Media3 (the current Android media library). For the legacy standalone `com.google.android.exoplayer2` library, use [android-data-exoplayer-sdk](https://github.com/FastPix/android-data-exoplayer-sdk). Both report to the same FastPix dashboard.
 
 **What metrics does it track?**
 Startup time, rebuffering, bitrate and resolution changes, playback errors, and viewer engagement - the signals that make up a quality-of-experience (QoE) score - plus device, OS, and app diagnostics.
@@ -331,13 +331,13 @@ Copyright © 2025 FastPix. All rights reserved. This project is proprietary soft
 
 For questions, issues, or feature requests:
 - **Email**: support@fastpix.com
-- **Documentation**: [Monitor AndroidX Media3 / ExoPlayer](https://fastpix.com/docs/video-data/monitors/androidx-media3)
+- **Documentation**: [Monitor AndroidX Media3](https://fastpix.com/docs/video-data/monitors/androidx-media3)
 - **Issues**: [GitHub Issues](https://github.com/FastPix/android-data-androidXmedia3/issues)
 
 ## Related documentation
 
-- [Monitor AndroidX Media3 / ExoPlayer](https://fastpix.com/docs/video-data/monitors/androidx-media3)
+- [Monitor AndroidX Media3](https://fastpix.com/docs/video-data/monitors/androidx-media3)
 - [FastPix Video Data overview](https://fastpix.com/docs/video-data/overview)
 - [Use custom dimensions](https://fastpix.com/docs/video-data/use-custom-dimensions)
 - [AndroidX Media3 Documentation](https://developer.android.com/media/media3)
-- [ExoPlayer Developer Guide](https://developer.android.com/media/media3/exoplayer)
+- [AndroidX Media3 player developer guide](https://developer.android.com/media/media3/exoplayer)
